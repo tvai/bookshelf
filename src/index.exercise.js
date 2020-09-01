@@ -1,9 +1,73 @@
-// 🐨 you'll need to import React and ReactDOM up here
+import React, {useState} from 'react'
+import ReactDOM from 'react-dom'
 
-// 🐨 you'll also need to import the Logo component from './components/logo'
+import {Logo} from './components/logo'
+import {Dialog} from '@reach/dialog'
+import '@reach/dialog/styles.css'
 
-// 🐨 create an App component here and render the logo, the title ("Bookshelf"), a login button, and a register button.
-// 🐨 for fun, you can add event handlers for both buttons to alert that the button was clicked
+function LoginForm({onSubmit, btnText}) {
+  function handleSubmit(event) {
+    event.preventDefault()
+    const {username, password} = event.target.elements
 
-// 🐨 use ReactDOM to render the <App /> to the root element
-// 💰 find the root element with: document.getElementById('root')
+    onSubmit({
+      username: username.value,
+      password: password.value,
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="username">Username</label>
+        <input type="text" id="username" />
+      </div>
+
+      <div>
+        <label htmlFor="password">Password</label>
+        <input type="password" id="password" />
+      </div>
+
+      <button type="submit">{btnText}</button>
+    </form>
+  )
+}
+
+function App() {
+  const [openModal, setOpenModal] = useState('none')
+
+  function login(formData) {
+    console.log('login', formData)
+  }
+
+  function register(formData) {
+    console.log('register', formData)
+  }
+
+  return (
+    <div>
+      <Logo />
+      <h1>Bookshelf</h1>
+      <button onClick={() => setOpenModal('login')}>Login</button>
+      <button onClick={() => setOpenModal('register')}>Register</button>
+
+      <Dialog aria-label="Login Form" isOpen={openModal === 'login'}>
+        <div>
+          <button onClick={() => setOpenModal('none')}>Close</button>
+        </div>
+        <h3>Login</h3>
+        <LoginForm onSubmit={login} btnText="Login"></LoginForm>
+      </Dialog>
+
+      <Dialog aria-label="Registration Form" isOpen={openModal === 'register'}>
+        <div>
+          <button onClick={() => setOpenModal('none')}>Close</button>
+        </div>
+        <h3>Register</h3>
+        <LoginForm onSubmit={register} btnText="Register"></LoginForm>
+      </Dialog>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
