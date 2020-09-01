@@ -13,6 +13,7 @@ const spin = keyframes({
 const Spinner = styled(FaSpinner)({
   animation: `${spin} 1s linear infinite`,
 })
+
 Spinner.defaultProps = {
   'aria-label': 'loading',
 }
